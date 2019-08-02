@@ -20,18 +20,18 @@ public class CameraFollow : MonoBehaviour
         //if(!useOffsetValues)
         //{
         //Calculate and store the offset value by getting the distance between the player's position and camera's position.
-        offset = player.transform.position - transform.position ;
+        offset = player.transform.position - transform.position;
         //}
 
         pivot.transform.position = player.transform.position;
         pivot.transform.parent = player.transform;
         //can't see cursor
         Cursor.lockState = CursorLockMode.Locked;
-  
+
     }
 
-    
-    void Update()
+
+    void LateUpdate()
     {
         //get the x position of the mouse and rotate the player
         float horizontal = Input.GetAxis("Mouse X") * rotateSpeed;
@@ -45,16 +45,16 @@ public class CameraFollow : MonoBehaviour
         float desiredXAngle = pivot.transform.eulerAngles.x;
         Quaternion rotation = Quaternion.Euler(desiredXAngle, desiredYAngle, 0);
         transform.position = player.transform.position - (rotation * offset);
-      
+
         //make camera not go below ground
-        if(transform.position.y < player.transform.position.y)
+        if (transform.position.y < player.transform.position.y)
         {
-            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - .5f, transform.position.z);
+            transform.position = new Vector3(player.transform.position.x, player.transform.position.y/*- .5f*/, transform.position.z);
         }
 
         //look at player
         transform.LookAt(player.transform);
-        
+
     }
 
     //void LateUpdate()
