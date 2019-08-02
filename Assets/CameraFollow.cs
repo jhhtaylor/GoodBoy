@@ -12,6 +12,8 @@ public class CameraFollow : MonoBehaviour
     public bool useOffsetValues;
 
     public float rotateSpeed;
+
+    public Transform pivot;
     // Use this for initialization
     void Start()
     {
@@ -21,25 +23,36 @@ public class CameraFollow : MonoBehaviour
         offset = player.transform.position - transform.position ;
         //}
 
+        pivot.transform.position = player.transform.position;
+        pivot.transform.parent = player.transform;
+        //can't see cursor
+        Cursor.lockState = CursorLockMode.Locked;
+  
     }
 
-    // LateUpdate is called after Update each frame
+    
     void Update()
     {
         //get the x position of the mouse and rotate the player
         float horizontal = Input.GetAxis("Mouse X") * rotateSpeed;
         player.transform.Rotate(0, horizontal, 0);
-
+        //get the y position of the mouse and rotate the pivot
         float vertical = Input.GetAxis("Mouse Y") * rotateSpeed;
-        player.transform.Rotate(vertical, 0, 0);
+        pivot.transform.Rotate(-vertical, 0, 0);
 
         //move the camera based on the current rotation of the target and the original offset
         float desiredYAngle = player.transform.eulerAngles.y;
-        float desiredXAngle = player.transform.eulerAngles.x;
-        Quaternion rotation = Quaternion.Euler(0, desiredYAngle, 0);
+        float desiredXAngle = pivot.transform.eulerAngles.x;
+        Quaternion rotation = Quaternion.Euler(desiredXAngle, desiredYAngle, 0);
         transform.position = player.transform.position - (rotation * offset);
-        // Set the position of the camera's transform to be the same as the player's, but offset by the calculated offset distance.
-        //transform.position = player.transform.position - offset;
+      
+        //make camera not go below ground
+        if(transform.position.y < player.transform.position.y)
+        {
+            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - .5f, transform.position.z);
+        }
+
+        //look at player
         transform.LookAt(player.transform);
         
     }
