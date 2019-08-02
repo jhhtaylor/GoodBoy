@@ -14,6 +14,12 @@ public class CameraFollow : MonoBehaviour
     public float rotateSpeed;
 
     public Transform pivot;
+
+    public float maxViewAngle;
+
+    public float minViewAngle;
+
+    public bool invertY;
     // Use this for initialization
     void Start()
     {
@@ -38,7 +44,27 @@ public class CameraFollow : MonoBehaviour
         player.transform.Rotate(0, horizontal, 0);
         //get the y position of the mouse and rotate the pivot
         float vertical = Input.GetAxis("Mouse Y") * rotateSpeed;
-        pivot.transform.Rotate(-vertical, 0, 0);
+
+        //allosw player to invert controls
+        if(invertY)
+        {
+            pivot.transform.Rotate(vertical, 0, 0);
+        }
+        else
+        {
+            pivot.transform.Rotate(-vertical, 0, 0);
+        }
+
+        //limit the up/down camera rotation
+        if(pivot.rotation.eulerAngles.x > maxViewAngle && pivot.rotation.eulerAngles.x < 180f)
+        {
+            pivot.rotation = Quaternion.Euler(maxViewAngle, 0, 0);
+        }
+        if (pivot.rotation.eulerAngles.x > 180f && pivot.rotation.eulerAngles.x < 360f + minViewAngle)
+        {
+            Debug.Log("Over here");
+            pivot.rotation = Quaternion.Euler(360f + minViewAngle, 0, 0);
+        }
 
         //move the camera based on the current rotation of the target and the original offset
         float desiredYAngle = player.transform.eulerAngles.y;
@@ -57,8 +83,4 @@ public class CameraFollow : MonoBehaviour
 
     }
 
-    //void LateUpdate()
-    //{
-    //    transform.position = player.transform.position + offset;
-    //}
 }
