@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class GameManager : MonoBehaviour
     public AudioClip bark4;
     public AudioClip bark5;
     public AudioClip bark6;
+
+    public int currentItem;
+
+    public Text itemText;
 
     // Start is called before the first frame update
     void Start()
@@ -63,5 +68,11 @@ public class GameManager : MonoBehaviour
 
         }
 
+    }
+
+    public void addItem(int itemToAdd)
+    {
+        currentItem += itemToAdd;
+        itemText.text = "Item: " + currentItem;
     }
 }

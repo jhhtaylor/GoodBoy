@@ -62,7 +62,7 @@ public class CameraFollow : MonoBehaviour
         }
         if (pivot.rotation.eulerAngles.x > 180f && pivot.rotation.eulerAngles.x < 360f + minViewAngle)
         {
-            Debug.Log("Over here");
+            //Debug.Log("Over here");
             pivot.rotation = Quaternion.Euler(360f + minViewAngle, 0, 0);
         }
 
